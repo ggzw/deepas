@@ -1,3 +1,5 @@
+#4个模型的数据处理，包括真数据和模拟假数据的生成。
+
 #!/usr/bin/perl
 $annotation_path = '.././data/homo_sapiens/trans';     #读入gtf注释文件
 $hg19_path = '.././data/hg19.fa';                      
