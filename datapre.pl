@@ -2,7 +2,7 @@
 $annotation_path = '.././data/homo_sapiens/trans';     #读入gtf注释文件
 $hg19_path = '.././data/hg19.fa';                      
 $bp = 64;                                              #每个剪接位点用以剪接位点为中心的64bp碱基序列表示
-$ban = 33;
+$ban = 33;                                             #$bp/2+1
 #open source data
 open gene,"<$hg19_path" or die$!;
 open annotation,"<$annotation_path" or die$!;
