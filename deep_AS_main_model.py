@@ -1,3 +1,4 @@
+#该文件主要为数据处理及训练测试
 import tensorflow as tf
 import deep_AS_config
 import os
@@ -10,7 +11,8 @@ import time
 
 global_step = tf.get_variable('global_step', dtype='int32',shape=[1],initializer=tf.constant_initializer(0), trainable=False)
 step = 0
-def database(dir):
+
+def database(dir):              #预测剪接位点模型数据处理，每个碱基one-hot编码。
 	f=open(dir,'r')
 	decodedic = {'A':[0,0,0,1,0],
 				'T':[0,0,1,0,0],
@@ -36,7 +38,7 @@ def database(dir):
 		y_one_hot.append(decodelabel[y])
 	return x_one_hot,y_one_hot,len(x_one_hot)
 
-def getbatch(x,y,lenth):
+def getbatch(x,y,lenth):          #小批次训练，这里产生大小为batch_size的小批次。
 	x_batch=[]
 	y_batch=[]
 	for i in range(deep_AS_config.FLAGS.batch_size):
@@ -45,7 +47,7 @@ def getbatch(x,y,lenth):
 		y_batch.append(y[j])
 	return x_batch,y_batch
 
-def database2(dir):
+def database2(dir):      #外显子预测模型数据处理，处理碱基序列还有外显子长度作为输入，one-hot编码。
 	f=open(dir,'r')
 	decodedic = {'A':[0,0,0,1,0],
 				'T':[0,0,1,0,0],
@@ -89,7 +91,7 @@ def database2(dir):
 		y_one_hot.append(decodelabel[y])
 	return x_one_hot,y_one_hot,len(x_one_hot)
 
-def train():
+def train():     #预测剪接位点模型、外显子模型、相邻外显子模型的训练
 	print("train()")
 	# TRAINING on train_set
 	if deep_AS_config.FLAGS.model == "train1":
@@ -174,7 +176,7 @@ def train():
 		#关闭句柄
 		log_file_handle.close()
 
-def database3(dir):
+def database3(dir):           #外显子相邻模型数据处理
 	f=open(dir,'r')
 	decodedic = {'A':[0,0,0,1,0],
 				'T':[0,0,1,0,0],
@@ -191,11 +193,11 @@ def database3(dir):
 	for line in data:
 		#print (len(line.split()))
 		arrayx=[]
-		if line.split()[2]=="@":
+		if line.split()[2]=="@":       #如果是第一个外显子，则左端添加32个N
 			start="NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"+line.split()[0]
 		else:
 			start=line.split()[0]
-		if line.split()[3]=="#":
+		if line.split()[3]=="#":         #如果是最后一个外显子，则优端添加32个N
 			end=line.split()[1]+"NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
 		else:
 			end=line.split()[1]
@@ -350,7 +352,7 @@ def test():
 			print("error")
 		
 		test_cycle(model,sess,x,y,l)
-def usage_function():
+def usage_function():          #使用实际数据，输出预测结果
 	print("usage_function")
 	if deep_AS_config.FLAGS.model == "use":
 		x,l = database_use()
@@ -383,7 +385,7 @@ def usage_function():
 				f.write(str(pre_label[i]))
 				f.write('\n')
 		
-def database_use():
+def database_use():   #预测剪接位点模型实际数据的处理
 	f=open(deep_AS_config.FLAGS.use_dir,'r')
 	decodedic = {'A':[0,0,0,1,0],
 				'T':[0,0,1,0,0],
@@ -401,7 +403,7 @@ def database_use():
 			arrayx.append(decodedic[i])
 		x_one_hot.append(arrayx)
 	return x_one_hot,len(x_one_hot)
-def database_use2(dir):
+def database_use2(dir):     #预测外显子模型实际数据的处理
 	f=open(deep_AS_config.FLAGS.use_dir2,'r')
 	decodedic = {'A':[0,0,0,1,0],
 				'T':[0,0,1,0,0],
@@ -439,7 +441,7 @@ def database_use2(dir):
 		x_one_hot.append(arrayx)
 	return x_one_hot,len(x_one_hot)
 
-def LSTMtrain():
+def LSTMtrain():     #转录本预测模型的训练
 	print ("LSTMtrain()")
 	dir = "../G_bysj/data/"
 	x,y,l=L.database(dir+'protein_transgraph_train',300)
@@ -483,7 +485,7 @@ def LSTMtrain():
 		#input_feed[self.input_dict["data1_y"]] = input_y
 		#loss = tf.reduce_mean(self.loss)correct_pred = tf.equal(tf.argmax(self.output, 1),tf.argmax(self.input_dict["data1_y"], 1))
 		#accuracy = tf.reduce_mean(tf.cast(correct_pred,tf.float32))
-def testLSTM(dir,LSTM,sess,log_file_handle):
+def testLSTM(dir,LSTM,sess,log_file_handle):   #转录本预测模型的测试
 	print('testLSTM()')
 	print('='*80)
 	x,y,l = L.database(dir,deep_AS_config.FLAGS.maxlen)
