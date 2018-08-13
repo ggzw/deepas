@@ -1,3 +1,5 @@
+#转录本预测模型使用本文的RNN模型
+
 import functools
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "1"
@@ -183,34 +185,3 @@ def getbatch(x, y, lenth,batch_size = 64):
 		y_batch.append(y[j])
 	#print(y_batch)
 	return x_batch, y_batch
-
-
-#	if __name__ == '__main__':
- 	# We treat images as sequences of pixel rows.
- 	#length = 300
-# 	image_size = 384
-# 	num_classes = 2
- 	#dir = "../../../home/zhangcheng/alt/data64/protein_transgraph_test"
-
- 	#x, y, l = database(dir, length)
-
-# 	data = tf.placeholder(tf.float32, [None, length, image_size])
-# 	target = tf.placeholder(tf.float32, [None, num_classes])
- 	#model = VariableSequenceClassification()
- 	#sess = tf.Session()
- 	#sess.run(tf.global_variables_initializer())
- 	#for epoch in range(10):
- 	#	accs = 0
- 	#	costs = 0
- 	#	for _ in range(100):
- 	#		batch_x,batch_y = getbatch(x,y,l)
- 	#		_,cost,error = sess.run([model.optimize,model.cost,model.error],{data: batch_x, target: batch_y})
- 	#		accs += error
- 	#		costs += cost
- 	#	t_cost = costs/100
- 	#	t_acc = accs/100
- 	#	print(t_cost)
- 	#	print(t_acc)
- 	#	batch_x, batch_y = getbatch(x, y, l)
- 	#	acc = sess.run(model.error, {data: batch_x, target: batch_y})
- 	#	print('Epoch {:2d} error {:3.1f}%'.format(epoch + 1, 100 * error))
