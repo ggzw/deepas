@@ -1,3 +1,5 @@
+#预测剪接位点模型、预测外显子模型、预测相邻外显子模型都用本文中的CNN和神经网络
+
 import numpy as np
 import tensorflow as tf
 import deep_AS_config
